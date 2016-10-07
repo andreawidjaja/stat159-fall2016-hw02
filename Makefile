@@ -9,10 +9,10 @@ report/report.pdf: report/report.Rmd data/regression.RData images/scatterplot-tv
 	cd report; pandoc report.Rmd -s -o report.pdf
 
 data/eda-output.txt: code/eda-script.R data/Advertising.csv
-	cd report; Rscript eda-script.R
+	cd code; Rscript eda-script.R
 
 data/regression.RData: code/regression-script.R data/Advertising.csv
-	cd report; Rscript regression-script.R
+	cd code; Rscript regression-script.R
 
 clean:
 	rm -f report/report.pdf
