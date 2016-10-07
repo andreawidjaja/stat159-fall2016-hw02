@@ -1,3 +1,7 @@
+# Stat 159 Homework 2
+
+# Simple Regression
+
 # Abstract
 # Introduction
 # Data
