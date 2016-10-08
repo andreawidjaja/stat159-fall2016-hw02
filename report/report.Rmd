@@ -13,7 +13,7 @@ header-includes: \usepackage{float}
 
 # Abstract  
 
-This paper consists of the reproduced results from _Section 3.1 Simple Linear Regression_ from the book **An Introduction to Statistical Learning** _by Gareth James, Daniel Witten, Trevor Hastie, and Robert Tibshirani._ This paper will discuss topics of simple linear regression such as estimating the coefficients, assessing the accuracy of the coefficient estimates, and assessing the accuracy of the model. (least square approach)
+This paper consists of the reproduced results from _Section 3.1 Simple Linear Regression_ from the book **An Introduction to Statistical Learning** _by Gareth James, Daniel Witten, Trevor Hastie, and Robert Tibshirani._ This paper will discuss topics of simple linear regression such as estimating the coefficients, assessing the accuracy of the coefficient estimates, and assessing the accuracy of the model using the least square approach.
 
 # Introduction  
 Suppose we are given information regarding the sales progress of a particular product (in thousands of units) and advertising budgets (in thousands of dollar) for three medias. As statistical consultants, we are given a task to develop a marketing plan that will result in high product sales with minimum advertising budget possible. Before tackling this problem, there are several factors that we must consider. First of all, we should determine whether there is a relationship between advertising budget and sales. If there is no relationship, then there is no point in spending money on advertising. If there is, however, a relationship, then we should know the strength of this relationship. Meaning that, if we are given the advertising budget, are we able to predict sales with a high level of accuracy?
@@ -64,11 +64,12 @@ $$\hat{\beta_0} = \bar{y} - \hat{\beta_1}*\bar{x}$$
 
 Where $\bar{y}=\frac{\sum_{i=1}^n(y_i)}{n}$ and $\bar{x}=\frac{\sum_{i=1}^n(x_i)}{n}$ are sample means.  
 
-We get: $\hat{\beta_0} = 7.03$ and $\hat{\beta_1} = 0.0475$
+We get the coefficient (in **Table 1**): $\hat{\beta_0} = 7.03$ and $\hat{\beta_1} = 0.0475$
 
 This solves for the least squares coefficient estimates for the simple linear regression.
 
-### Asessing the Accuracy of the Coefficient Estimates  
+### Hypothesis Tests
+#### Asessing the Accuracy of the Coefficient Estimates  
 Since standard errors can measure accuracy, standard errors are used to perform *hypothesis tests* on the coefficients.
 We are going to test the *null hypothesis* versus the *alternative hypotehsis*.  
 
@@ -89,12 +90,15 @@ On the contrary, if $SE(\hat{\beta_1})$ is large, then $\beta_1$ is large, such 
 
 t-statistic:
 $$ t = \hat{\beta_1} - 0 / SE(\beta_1) $$
-measures the number of standard deviations that $\hat{\beta_1}$ is away from 0.
+measures the number of standard deviations that $\hat{\beta_1}$ is away from 0. If there is no relationship betwen $X$ and $Y$, then the equation will be $$ Y ={\beta_0} + \epsilon$$
+Thus, we can say that $\hat{\beta_1} = 0$, and that we will have a t-distribution with $n-2$ degrees of freedom. We can then find the $p-value$, which is the probability of observing any value equal to $|t|$ or larger. If the p-value is small, then there is a relationship between $X$ and $Y$, and we reject the *null hypothesis*.
 
-###Assessing the Accuracy of the Model 
+(results can be seen in **Table 1**)
+
+####Assessing the Accuracy of the Model 
 If we reject the null hypothesis, and go for the alternative hypothesis instead, we should measure the extent to which the model fits the data. The quality of a linear regression fit is assessed using two related quantities: *Residual Standard Error* and $R^2 Statistic$.
 
-####Residual Standard Error(RSE) 
+#####Residual Standard Error(RSE) 
 The RSE is an estimate of the standard deviation of $\epsilon$. It is the average amount that the response will deviate from the true regression line. Additionally, in simple words, it is a measure of the lack of fit of the linear model to the data.
 $$ RSE = \sqrt {( \frac{1}{n-2}) * RSS} $$
 $$ RSE = \sqrt {( \frac{1}{n-2}) * (\sum_{i=1}^n (y_i - \hat{y}_i)^2)}$$
@@ -103,27 +107,23 @@ When the RSE is small, then we can assume that for $i = 1,...,n$, $\hat{y}_i=y_i
 This means that we can conclude that the model fits the data very well.
 On the contrary, if $\hat{y}_i$ is very far from $y_i$, for one or more of the observations, then the RSE will be large, indicating that the model does not fit the data very well.
 
-###R^2 Statistic
-The $R^2 Statistic$ provides an alternative measure of fit to the RSE.
-
+######R^2 Statistic
+The $R^2 Statistic$ provides an alternative measure of good fit to the RSE. It is a measure of the linear relationship between $X$ and $Y$, and has the range [0,1]. Additionally, it is identical to the squared correlation.
 The formula of $R^2$ is given by:
 $$ R^2 = \frac{(TSS - RSS)}{TSS} \ = 1 - \frac{RSS}{TSS} $$
 where,
 $$ TSS = {\sum (y_i - \hat{y}_i)^2 } $$ is the total sum of squares.
 
+If $R^2$ is near 0, then our linear model does not fit the data well. On the contrary, if $R^2$ is near 1, the our linear model fits the data well.
 
-
-
-
-It is the least squares fit for the regression of sales onto TV. Fit is found by minimiizng the sum of squared erros.
-
-In other words, the line represents a simple model that can be used to predict *Sales* using the TV medium.
-
+(results can be seen in **Table 2**)
 
 
 # Results  
 
-```{r echo=FALSE, fig.width=6, fig.height=4, fig.pos='H', fig.align='center', fig.cap="scatterplot"}
+This scatterplot (**Figure 1**) shows the least squares fit for the regression of Sales onto TV. The line represents a simple model that can be used to predict *Sales* using the TV medium.
+
+```{r echo=FALSE, fig.width=6, fig.height=4, fig.pos='H', fig.align='center', fig.cap="Scatterplot with Fitted Regression Line - From the Advertising data, this shows the least squares fit for the regression of Sales onto TV. This means that, the purple line represents a simple model that can be used to predict sales using TV."}
 library(png)
 library(grid)
 img <- readPNG("../images/scatterplot-tv-sales.png")
@@ -131,28 +131,33 @@ grid.raster(img)
 ```
 
 
-We compute the regression coefficients
+
+To access the accuracy of the coefficient estimates, several calculations are needed to be made to solve for $\hat{\beta_0}$ and $\hat{\beta_1}$. We achieved the regression coefficients in the following table (**Table 1**):
 
 ```{r results='asis', message=FALSE, echo=FALSE, warning=FALSE}
 load('../data/regression.RData')
 library(xtable)
 regression_table <- xtable(RegressionSummary$coefficients, digits=4,
-                           caption='Information about Regression Coefficients')
+                           caption='Information about Regression Coefficients - note that: Sales variable is measured in thousands of units, and the TV variable is in thousands of dollars')
 print(regression_table, type = "latex", comment=FALSE, caption.placement='top')
 ```
 
-More information about the least square model is given in the table below:
+The first column of Table 1 shows the coefficients we estimated. The estimated slope coefficient $\hat{\beta_1}$ is 0.047, since it is measured in thousands of units, then for every $1,000 of increase in budget sales, there will be an increase in total sales by $48. With the p-value being very low (almost 0), this shows that TV advertising effect Sales greatly.
+
+
+To access the accuracy of the model, there are several calculations that are needed to be made. More information about the least square model for the regression of number of units sold on TV advertising budget is given in the table (**Table 2**) below:
 
 ```{r results='asis', message=FALSE, echo=FALSE}
 x = data.frame(
-  label = c("RSE", "R2", "F-statistic"),
-  stats = c(RegressionSummary$sigma, RegressionSummary$r.squared, RegressionSummary$fstatistic[1]))
+  Quantity = c("RSE", "R^2", "F-statistic"),
+  Value = c(RegressionSummary$sigma, RegressionSummary$r.squared, RegressionSummary$fstatistic[1]))
 regression_table2 <- xtable(x, digits=4,
                            caption='Regression Quality Indices')
 print(regression_table2, type = "latex", comment=FALSE, caption.placement='top')
 ```
 
-
+The R Squared is 0.61, meaning that 61% of Sales is affected by a linear regression on TV. Since $R^2$ is closer to 1, it means that our linear model fits the data well. Additionally, with the value of RSE being 3.26, it shows that the sales in each market deviates from the regression line approximately 3,260 units on average. Since RSE is a measure of bad fit, and it is small, it shows that our linear model fits the data  pretty well.
 
 
 # Conclusions
+In conclusion, it has been proven that linear regression can be utilized to predict the outcome of an independent variable from a dependent variable, if there happens to be a relationship between the two variables. Additionally, we can see that from Table 1, that the intercept $\hat{\beta_0} = 7.03$ and the slope $\hat{\beta_1} = 0.0475$. This means that an increase of $1,000 in the TV advertising budget, is associated with an increase in sales by around 50 units. To see whether or not this is a good number depends on the client.
