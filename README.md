@@ -1,5 +1,8 @@
 # Stat 159, Fall 2016 (Homework 2)  
 
+This paper will discuss topics on Simple Linear Regression, along side with coming up a data-based marketing strategy to increase sales.
+
+
 * Abstract
 * Introduction
 * Data
